@@ -29,8 +29,8 @@ const server = http.createServer((req, res) => {
         const path = parsedUrl.pathname;
         const queryParams = parsedUrl.query;
 
+        // [GET 분기 1: '?' 있는 경우]
         if (Object.keys(queryParams).length > 0) {
-            // Query parameter 있는 경우 계산 요청
             console.log("## GET request for calculation.");
 
             // 1. 파라미터 추출 및 계산
@@ -42,22 +42,22 @@ const server = http.createServer((req, res) => {
             res.end(`<html><body>${getResponse}</body></html>`);
             console.log(`## ${getResponse}`);    
         
+        // [GET 분기 2: '?' 없는 경우]    
         } else {
-            // Query parameter 없는 경우 단순 경로 요청
-            const responseMessage = `<p>HTTP Request GET for Path: ${req.url}</p>`;
+            const responseMessage = `<p>HTTP Request GET for Path: ${path}</p>`;
             res.end(`<html><body>${responseMessage}</body></html>`);
             console.log(`## GET request for directory => ${path}.`);
         }
    
+        // do_POST (현재는 405로 처리)
         } else {
-        // GET 아닌 요청 => 일단 거부
         console.log(`This server only handles GET request for now`);
         res.writeHead(405);
         res.end(`This server only handles GET request for now`);
         }
     });
 
-// 6. 지정된 포트 번호와 이름으로 서버 실행
+// __main__
 server.listen(serverPort, serverName, () => {
     console.log(`## HTTP server started at HTTP://${serverName}:${serverPort}.`);
 
