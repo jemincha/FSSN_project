@@ -1,6 +1,7 @@
 // 1. Node.js http, url 모듈 가져오기
 const http = require('http');
 const url = require('url');
+const querystring = require('querystring');
 
 // 2. 서버 설정
 const serverName = 'localhost'; //127.0.0.1
@@ -18,6 +19,8 @@ function parameterRetrieval(queryParams) { // multiplication parameter
 
 // 3. HTTP 서버 생성
 const server = http.createServer((req, res) => {
+
+    // [GET 요청 처리]
     if (req.method === 'GET') {
         console.log("## do_GET() activated.");
     
@@ -49,13 +52,43 @@ const server = http.createServer((req, res) => {
             console.log(`## GET request for directory => ${path}.`);
         }
    
-        // do_POST (현재는 405로 처리)
+        // [POST 요청 처리]
+        } else if (req.method === 'POST') {
+        console.log("## do_POST() activated.");
+        
+        let body = '';
+
+        // 1. POST body 데이터 수신
+        req.on('data', (chunk) => {
+            body += chunk;
+        });
+
+        // 2. POST body 데이터 수신 완료
+        req.on('end', () => {
+            console.log("## Received POST data:", body);
+
+            // 3. body 문자열 파싱
+            const postParams = querystring.parse(body);
+            
+            // 4. 파라미터 추출 및 계산
+            const [param1, param2] = parameterRetrieval(postParams);
+            const result = simpleCalc(param1, param2);
+
+            // 5. 응답 헤더/생성
+            res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+            const postResponse = `POST request for calculation => ${param1} x ${param2} = ${result}`;
+            res.end(`<html><body>${postResponse}</body></html>`);
+            console.log(`## ${postResponse}`); 
+        });
+
+        //[GET/POST 아닌 나머지 요청 처리]
         } else {
-        console.log(`This server only handles GET request for now`);
-        res.writeHead(405);
-        res.end(`This server only handles GET request for now`);
+            console.log(`This server only handles GET and POST request for now`);
+            res.writeHead(405);
+            res.end(`This server only handles GET and POST request for now`);
         }
     });
+
 
 // __main__
 server.listen(serverPort, serverName, () => {
