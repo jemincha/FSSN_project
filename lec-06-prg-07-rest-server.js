@@ -4,6 +4,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ exrended: true }));
 
+// MembershipHandler 클래스 정의
 class MembershipHandler {
     constructor() {
         this.database = {};
@@ -27,6 +28,15 @@ class MembershipHandler {
         }
     }
 
+    update(id, value) {
+        if (id in this.database) {
+            this.database[id] = CSSMathValue;
+            return { [id]: this.database[id] };
+        } else {
+            return { [id]: "None" };
+        }
+    }
+
     delete(id) {
         if (id in this.database) {
             delete this.database[id];
@@ -39,4 +49,18 @@ class MembershipHandler {
 
 const myManager = new MembershipHandler();
 
-console.log("## tset: MembershipHandler calss implemention completed.")
+// 라우팅 설정
+app.post('/membership_api/:member_id', (req, res) => {
+    const memberId = req.params.member_id;
+    const value = req.body[memberId];
+    const result = myManager.create(memberId, value);
+    res.json(result);
+});
+
+app.get('membership_api/:member_id', (req, res) => {
+    const memberId = req.params.member_id;
+    const result = myManager.read(memberId);
+    res.json(result);
+});
+
+console.log("## test: MembershipHandler routing (POST/GET) setup completed.");
