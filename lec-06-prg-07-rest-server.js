@@ -63,4 +63,21 @@ app.get('membership_api/:member_id', (req, res) => {
     res.json(result);
 });
 
-console.log("## test: MembershipHandler routing (POST/GET) setup completed.");
+app.put('/membership_api/:member_id', (req, res) => {
+    const memberId = req.params.member_id;
+    const value = req.body[memberId];
+    const result = myManager.update(memberId, value);
+    res.json(result);
+});
+
+app.delete('/membership_api/:member_id', (req, res) => {
+    const memberId = req.params.member_id;
+    const result = myManager.delete(memberId);
+    res.json(result);    
+});
+
+// 서버 실행
+const PORT = 5000;
+app.listen(PORT, () => {
+    console.log(`## REST server started at http://localhost:${PORT}`);
+});
