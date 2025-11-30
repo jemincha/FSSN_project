@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 app.use(express.json());
-app.use(express.urlencoded({ exrended: true }));
+app.use(express.urlencoded({ expended: true }));
 
 // MembershipHandler 클래스 정의
 class MembershipHandler {
@@ -21,7 +21,6 @@ class MembershipHandler {
 
     read(id) {
         if (id in this.database) {
-            this.database[id] = value;
             return { [id]: this.database[id] };
         } else {
             return { [id]: "None" };
@@ -30,7 +29,7 @@ class MembershipHandler {
 
     update(id, value) {
         if (id in this.database) {
-            this.database[id] = CSSMathValue;
+            this.database[id] = value;
             return { [id]: this.database[id] };
         } else {
             return { [id]: "None" };
@@ -57,7 +56,7 @@ app.post('/membership_api/:member_id', (req, res) => {
     res.json(result);
 });
 
-app.get('membership_api/:member_id', (req, res) => {
+app.get('/membership_api/:member_id', (req, res) => {
     const memberId = req.params.member_id;
     const result = myManager.read(memberId);
     res.json(result);
