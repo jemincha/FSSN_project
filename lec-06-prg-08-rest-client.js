@@ -46,7 +46,7 @@ async function runClient() {
         json = await res.json();
         console.log("#5 Code:", res.status, ">>", "JSON:", JSON.stringify(json), ">>", "JSON Result:", json['0002']);
 
-        // 6. Udate - registered (non error)
+        // 6. Update - registered (non error)
         const params6_create = new URLSearchParams();
         params6_create.append('0002', 'xrange');
         await fetch(`${BASE_URL}/0002`, {
@@ -62,6 +62,20 @@ async function runClient() {
         });
         json = await res.json();
         console.log("#6 Code:", res.status, ">>", "JSON:", JSON.stringify(json), ">>", "JSON Result:", json['0002']);
+    
+        // 7. Delete - registered (non error)
+        res = await fetch(`${BASE_URL}/0001`, {
+            method: 'DELETE'    
+        });
+        json = await res.json();
+        console.log("#7 Code:", res.status, ">>", "JSON:", JSON.stringify(json), ">>", "JSON Result:", json['0001']);
+
+        // 8. Delete - Non registered (non error)
+        res = await fetch(`${BASE_URL}/0001`, {
+            method: 'DELETE'
+        });
+        json = await res.json();
+        console.log("#8 Code:", res.status, ">>", "JSON:", JSON.stringify(json), ">>", "JSON Result:", json['0001']);
     
     } catch (error) {
         console.error("Error:", error);
