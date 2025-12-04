@@ -10,6 +10,7 @@ class MembershipHandler {
         this.database = {};
     }
 
+    // POST request
     create(id, value) {
         if (id in this.database) {
             return { [id]: "None" };
@@ -19,6 +20,7 @@ class MembershipHandler {
         }
     }
 
+    // GET request
     read(id) {
         if (id in this.database) {
             return { [id]: this.database[id] };
@@ -27,6 +29,7 @@ class MembershipHandler {
         }
     }
 
+    // PUT request
     update(id, value) {
         if (id in this.database) {
             this.database[id] = value;
@@ -36,6 +39,7 @@ class MembershipHandler {
         }
     }
 
+    // DELETE request
     delete(id) {
         if (id in this.database) {
             delete this.database[id];
@@ -48,7 +52,7 @@ class MembershipHandler {
 
 const myManager = new MembershipHandler();
 
-// 라우팅 설정
+// Create handler
 app.post('/membership_api/:member_id', (req, res) => {
     const memberId = req.params.member_id;
     const value = req.body[memberId];
@@ -56,12 +60,14 @@ app.post('/membership_api/:member_id', (req, res) => {
     res.json(result);
 });
 
+// Remove handler
 app.get('/membership_api/:member_id', (req, res) => {
     const memberId = req.params.member_id;
     const result = myManager.read(memberId);
     res.json(result);
 });
 
+// Update handler
 app.put('/membership_api/:member_id', (req, res) => {
     const memberId = req.params.member_id;
     const value = req.body[memberId];
@@ -69,6 +75,7 @@ app.put('/membership_api/:member_id', (req, res) => {
     res.json(result);
 });
 
+// Delete handler
 app.delete('/membership_api/:member_id', (req, res) => {
     const memberId = req.params.member_id;
     const result = myManager.delete(memberId);
